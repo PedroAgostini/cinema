@@ -9,11 +9,8 @@ require('dotenv/config')
 const Usuario = require('../models/usuario')
 
 route.post("/login", async (req, res) => {
-    const { email, cpf, senha } = req.body
-
-    if (!cpf)
-        return res.send({ msg: "Campo cpf é obrigatório"})
-
+    const { email, senha } = req.body
+    
     if (!email)
         return res.send({ msg: "Campo e-mail é obrigatório"})
 
@@ -49,13 +46,16 @@ route.post("/login", async (req, res) => {
 })
 
 route.post("/register", async (req, res) => {
-    const { email, cpf, senha } = req.body
+    const { email, cpf, nome, senha } = req.body
 
     if (!email)
         return res.send({ msg: "Campo e-mail é obrigatório"})
 
     if (!cpf)
         return res.send({ msg: "Campo CPF é obrigatório"})
+
+    if (!nome)
+        return res.send({ msg: " Campo nome é obrigatório"})
 
         const existingUser = await Usuario.findOne({ $or: [{ email }, { cpf }] })
 
@@ -81,7 +81,7 @@ route.post("/register", async (req, res) => {
     Email.RegistrarUsuario(email, numero)
     
     // Criação do usuário com e-mail, chave e CPF
-    var usuario = await Usuario.create({ email, chave: numero, cpf })
+    var usuario = await Usuario.create({ email, chave: numero, cpf, nome })
     return res.send(usuario)
 })
 
